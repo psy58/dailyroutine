@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f1e7">
+  <meta name="description" content="특수학교 학생이 오늘 할 일을 고르고 한 가지씩 확인하는 태블릿용 일과 앱">
+  <title>하루 한 걸음</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">주요 내용으로 바로 가기</a>
+  <header class="app-header">
+    <a class="brand" href="#" data-action="go-home" aria-label="하루 한 걸음 시작 화면으로 이동">
+      <span aria-hidden="true">☀️</span>
+      <span>하루 한 걸음</span>
+    </a>
+    <p id="screen-location" class="screen-location">시작 화면</p>
+  </header>
+
+  <main id="main-content" tabindex="-1">
+    <section id="start-screen" class="screen start-screen" aria-labelledby="start-title">
+      <div class="welcome-card">
+        <span class="hero-icon" aria-hidden="true">🌱</span>
+        <h1 id="start-title">오늘도 천천히 시작해요</h1>
+        <p id="start-message" class="lead"></p>
+        <p id="resume-note" class="resume-note" hidden>하던 일과가 있어요. 이어서 볼 수 있어요.</p>
+        <div class="start-actions">
+          <button class="button primary jumbo" type="button" data-action="open-build">
+            <span aria-hidden="true">▶️</span> 오늘의 일과 시작
+          </button>
+          <button id="resume-button" class="button secondary" type="button" data-action="resume" hidden>
+            <span aria-hidden="true">↩️</span> 하던 일과 이어서 보기
+          </button>
+          <button class="button quiet" type="button" data-action="open-settings">
+            <span aria-hidden="true">⚙️</span> 교사용 설정
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section id="build-screen" class="screen" aria-labelledby="build-title" hidden>
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">오늘 할 일 고르기</p>
+          <h1 id="build-title">무엇을 할까요?</h1>
+          <p id="build-message" class="lead"></p>
+        </div>
+        <button class="button quiet" type="button" data-action="go-home"><span aria-hidden="true">🏠</span> 처음으로</button>
+      </div>
+      <div id="build-empty" class="empty-state" hidden>
+        <span aria-hidden="true">🗂️</span>
+        <h2>고를 카드가 없어요</h2>
+        <p>교사용 설정에서 카드를 추가할 수 있어요.</p>
+        <button class="button secondary" type="button" data-action="open-settings">⚙️ 교사용 설정</button>
+      </div>
+      <div id="build-content" class="build-layout">
+        <section class="panel" aria-labelledby="card-pick-title">
+          <h2 id="card-pick-title">1. 카드를 눌러 골라요</h2>
+          <div id="build-card-grid" class="card-grid"></div>
+        </section>
+        <section class="panel order-panel" aria-labelledby="order-title">
+          <h2 id="order-title">2. 순서를 확인해요</h2>
+          <p class="helper">위·아래 버튼으로 순서를 바꿀 수 있어요.</p>
+          <ol id="selected-list" class="selected-list"></ol>
+          <p id="selection-empty" class="selection-empty">아직 고른 카드가 없어요.</p>
+          <button id="begin-routine" class="button primary wide" type="button" data-action="begin-routine" disabled>
+            <span aria-hidden="true">▶️</span> 이 순서로 시작
+          </button>
+        </section>
+      </div>
+    </section>
+
+    <section id="routine-screen" class="screen" aria-labelledby="routine-title" hidden>
+      <div class="routine-topline">
+        <div>
+          <p class="eyebrow">지금 할 일</p>
+          <h1 id="routine-title">오늘의 일과</h1>
+          <p id="routine-message" class="lead"></p>
+        </div>
+        <button class="button quiet" type="button" data-action="go-home"><span aria-hidden="true">🏠</span> 처음으로</button>
+      </div>
+      <div id="routine-empty" class="empty-state" hidden>
+        <span aria-hidden="true">🌤️</span>
+        <h2>진행할 일과가 없어요</h2>
+        <button class="button primary" type="button" data-action="open-build">일과 고르기</button>
+      </div>
+      <div id="routine-content" class="routine-layout">
+        <nav class="timeline-panel" aria-label="오늘의 전체 일과 상태">
+          <h2>전체 순서</h2>
+          <ol id="status-list" class="status-list"></ol>
+        </nav>
+        <article class="activity-panel" aria-labelledby="current-activity-name">
+          <p id="activity-position" class="activity-position"></p>
+          <div id="current-icon" class="current-icon" aria-hidden="true"></div>
+          <h2 id="current-activity-name"></h2>
+          <div id="step-box" class="step-box"></div>
+          <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+          <div class="activity-actions">
+            <button id="complete-button" class="button success jumbo" type="button" data-action="complete">
+              <span aria-hidden="true">✅</span> 완료했어요
+            </button>
+            <button id="next-button" class="button primary jumbo" type="button" data-action="next" hidden>
+              <span aria-hidden="true">➡️</span> 다음 활동 보기
+            </button>
+            <button id="previous-button" class="button secondary" type="button" data-action="previous">
+              <span aria-hidden="true">⬅️</span> 이전
+            </button>
+            <button id="hint-button" class="button secondary" type="button" data-action="hint">
+              <span aria-hidden="true">💡</span> 힌트 보기
+            </button>
+            <button id="speech-toggle-button" class="button secondary" type="button" data-action="toggle-speech" aria-pressed="false" disabled>
+              <span aria-hidden="true">🔇</span> 음성 켜기
+            </button>
+            <button id="speak-button" class="button secondary" type="button" data-action="speak" disabled>
+              <span aria-hidden="true">🔊</span> 현재 활동 읽어 주기
+            </button>
+            <button id="retry-button" class="button quiet" type="button" data-action="retry">
+              <span aria-hidden="true">🔄</span> 다시 하기/다시 보기
+            </button>
+          </div>
+          <p id="speech-note" class="speech-note"></p>
+        </article>
+      </div>
+    </section>
+
+    <section id="finish-screen" class="screen finish-screen" aria-labelledby="finish-title" hidden>
+      <div class="finish-card">
+        <span class="celebration" aria-hidden="true">🎉</span>
+        <h1 id="finish-title">오늘의 일과를 모두 마쳤어요!</h1>
+        <p id="finish-message" class="lead"></p>
+        <p class="praise">한 걸음씩 해낸 모습이 정말 멋져요.</p>
+        <div class="finish-actions">
+          <button class="button primary jumbo" type="button" data-action="new-routine"><span aria-hidden="true">🌱</span> 새 일과 고르기</button>
+          <button class="button quiet" type="button" data-action="go-home"><span aria-hidden="true">🏠</span> 처음으로</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings-screen" class="screen settings-screen" aria-labelledby="settings-title" hidden>
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow teacher-label">학생 화면과 분리된 공간</p>
+          <h1 id="settings-title">교사용 설정</h1>
+          <p class="lead">카드와 화면 안내 문구를 기기에만 저장해요.</p>
+        </div>
+        <button class="button primary" type="button" data-action="save-settings"><span aria-hidden="true">💾</span> 설정 저장</button>
+      </div>
+
+      <div class="settings-layout">
+        <section class="panel" aria-labelledby="cards-setting-title">
+          <div class="section-heading">
+            <div>
+              <h2 id="cards-setting-title">활동 카드</h2>
+              <p class="helper">표시 순서와 기본 일과 포함 여부를 정해요.</p>
+            </div>
+            <button class="button secondary" type="button" data-action="add-card"><span aria-hidden="true">➕</span> 카드 추가</button>
+          </div>
+          <div id="settings-card-list" class="settings-card-list"></div>
+          <div id="settings-empty" class="empty-state compact" hidden>
+            <p>카드가 없어요. 새 카드를 추가해 주세요.</p>
+          </div>
+        </section>
+
+        <section class="panel message-settings" aria-labelledby="message-setting-title">
+          <h2 id="message-setting-title">화면 안내 문구</h2>
+          <label for="message-start">시작 화면</label>
+          <textarea id="message-start" rows="2" maxlength="160"></textarea>
+          <label for="message-build">구성 화면</label>
+          <textarea id="message-build" rows="2" maxlength="160"></textarea>
+          <label for="message-routine">진행 화면</label>
+          <textarea id="message-routine" rows="2" maxlength="160"></textarea>
+          <label for="message-finish">마침 화면</label>
+          <textarea id="message-finish" rows="2" maxlength="160"></textarea>
+        </section>
+      </div>
+
+      <div class="settings-footer">
+        <button class="button quiet danger-text" type="button" data-action="confirm-reset"><span aria-hidden="true">🗑️</span> 별도 저장 데이터 초기화</button>
+        <button class="button secondary" type="button" data-action="restore-defaults"><span aria-hidden="true">↩️</span> 기본 예시 복원</button>
+        <button class="button quiet" type="button" data-action="cancel-settings">취소하고 나가기</button>
+        <button class="button primary" type="button" data-action="save-settings"><span aria-hidden="true">💾</span> 설정 저장</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <dialog id="card-dialog" aria-labelledby="card-dialog-title">
+    <form id="card-form" method="dialog">
+      <div class="dialog-heading">
+        <h2 id="card-dialog-title">활동 카드 추가</h2>
+        <button class="icon-button" type="button" data-action="close-card-dialog" aria-label="카드 편집 창 닫기">✕</button>
+      </div>
+      <div class="dialog-body">
+        <input id="card-id" type="hidden">
+        <label for="card-name">활동 이름</label>
+        <input id="card-name" type="text" maxlength="40" required>
+        <label for="card-icon">아이콘(이모지 또는 짧은 글자)</label>
+        <input id="card-icon" type="text" maxlength="8" required>
+        <label for="card-hint">힌트</label>
+        <textarea id="card-hint" rows="3" maxlength="200" required></textarea>
+        <label for="card-step-count">단계 수</label>
+        <input id="card-step-count" type="number" min="0" max="12" inputmode="numeric">
+        <label for="card-steps">단계 안내(한 줄에 한 단계)</label>
+        <textarea id="card-steps" rows="6" maxlength="600"></textarea>
+        <label class="check-row" for="card-included">
+          <input id="card-included" type="checkbox">
+          <span>기본 일과에 포함</span>
+        </label>
+      </div>
+      <div class="dialog-actions">
+        <button class="button quiet" type="button" data-action="close-card-dialog">취소</button>
+        <button class="button primary" type="submit"><span aria-hidden="true">💾</span> 카드 저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-description">
+    <div class="dialog-heading">
+      <h2 id="confirm-title">저장 데이터를 초기화할까요?</h2>
+      <button class="icon-button" type="button" data-action="close-confirm" aria-label="초기화 확인 창 닫기">✕</button>
+    </div>
+    <div class="dialog-body">
+      <p id="confirm-description">이 기기에 저장한 카드, 문구, 진행 상태가 모두 지워져요. 기본 예시로 다시 시작해요.</p>
+    </div>
+    <div class="dialog-actions">
+      <button class="button quiet" type="button" data-action="close-confirm">취소</button>
+      <button class="button danger" type="button" data-action="reset-data">초기화</button>
+    </div>
+  </dialog>
+</body>
+</html>
